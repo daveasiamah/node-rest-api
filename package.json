@@ -1,0 +1,32 @@
+{
+  "name": "ims-pos",
+  "version": "1.0.0",
+  "description": "Inventory Management App in React and Express with MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daveasiamah/ims-pos.git"
+  },
+  "author": "David Asiamah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daveasiamah/ims-pos/issues"
+  },
+  "homepage": "https://github.com/daveasiamah/ims-pos#readme",
+  "dependencies": {
+    "concurrently": "^4.0.1",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.8",
+    "mongoose": "^5.3.4",
+    "react-router-dom": "^4.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
