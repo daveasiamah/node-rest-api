@@ -3,22 +3,27 @@ const MongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
 
 const app = express();
-
+let str = '';
 //Use mongoose to connect to MongoDB
 let mongodbUri = "mongodb://localhost:27017/ims-pos";
+
 mongoose.connect(
   mongodbUri,
   { useNewUrlParser: true }
 );
-mongoose.Promise = global.Promise;
+function getUsers() {
+  mongoose.Promise = global.Promise;
+  let db = mongoose.connection;
 
-let db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-  // db.collection("users").find();
-  // console.log(db.collection("users").find("user1"));
-  console.log("Loaded Data from MongoDB!");
-});
+  db.on("error", console.error.bind(console, "connection error:"));
+  db.once("open", () => {
+    let cursor = db.collection("users").find();
+    cursor.forEach((user) => {
+      console.log(user);
+    })
+  });
+}
+
 
 //Connect to MongoDB database
 // let mongodbUri = "mongodb://localhost:27017/ims-pos";
@@ -42,16 +47,24 @@ db.once("open", () => {
 //   }
 // );
 
-//Static data load
+//Load Data
 let customersUrl = "/api/customers";
 app.get(customersUrl, (req, res) => {
   let customers = [
     { id: 1, firstName: "John", lastName: "Doe" },
     { id: 2, firstName: "Steve", lastName: "Smith" },
-    { id: 2, firstName: "Mary", lastName: "Swanson" }
+    { id: 3, firstName: "Mary", lastName: "Swanson" }
   ];
   res.json(customers);
   console.log(customers);
+});
+
+let usersUrl = "/api/users";
+app.get(usersUrl, (req, res) => {
+  let users = [];
+  users.push(getUsers());
+  res.json(users);
+  console.log(users);
 });
 
 const port = 5000;
