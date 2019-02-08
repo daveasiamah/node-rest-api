@@ -1,72 +1,98 @@
 const express = require("express");
-const MongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const morgan = require("morgan");
+const config = require("config");
+
+const router = express.Router();
 
 const app = express();
-let str = '';
-//Use mongoose to connect to MongoDB
-let mongodbUri = "mongodb://localhost:27017/ims-pos";
 
-mongoose.connect(
-  mongodbUri,
-  { useNewUrlParser: true }
-);
-function getUsers() {
-  mongoose.Promise = global.Promise;
-  let db = mongoose.connection;
-
-  db.on("error", console.error.bind(console, "connection error:"));
-  db.once("open", () => {
-    let cursor = db.collection("users").find();
-    cursor.forEach((user) => {
-      console.log(user);
-    })
-  });
+if (!config.get("PrivateKey")) {
+  console.error("FATAL ERROR: PrivateKey is not defined.");
+  process.exit(1);
 }
 
+//Declare Routes
+const items = require("./routes/api/items");
+const users = require("./routes/api/users");
+const auth = require("./routes/api/auth");
+const categories = require("./routes/api/categories");
+const customers = require("./routes/api/customers");
+const suppliers = require("./routes/api/suppliers");
+const orders = require("./routes/api/orders");
+const products = require("./routes/api/products");
+const inventory = require("./routes/api/inventory");
 
-//Connect to MongoDB database
-// let mongodbUri = "mongodb://localhost:27017/ims-pos";
-// MongoClient.connect(
-//   mongodbUri,
-//   { useNewUrlParser: true },
-//   (err, client) => {
-//     if (err) throw err;
+//Logging Requests to Server
+app.use(morgan("dev"));
 
-//     let db = client.db("ims-pos");
+//Use CORS : Handle requests from fontend clients
+app.use(cors());
 
-//     db.collection("users")
-//       .find()
-//       .toArray((err, result) => {
-//         if (err) throw err;
-
-//         // console.log(result);
-//         let appUser = result;
-//         appUser;
-//       });
-//   }
-// );
-
-//Load Data
-let customersUrl = "/api/customers";
-app.get(customersUrl, (req, res) => {
-  let customers = [
-    { id: 1, firstName: "John", lastName: "Doe" },
-    { id: 2, firstName: "Steve", lastName: "Smith" },
-    { id: 3, firstName: "Mary", lastName: "Swanson" }
-  ];
-  res.json(customers);
-  console.log(customers);
+//Access Controls
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
 });
 
-let usersUrl = "/api/users";
-app.get(usersUrl, (req, res) => {
-  let users = [];
-  users.push(getUsers());
-  res.json(users);
-  console.log(users);
+app.use("/uploads", express.static("uploads"));
+
+//BodyParser Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//DB Config
+const db = require("./config/keys").mongodbURI;
+
+//Connect to MongoDB
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log("MongoDB Connected..."))
+  .catch(err => console.log(err));
+
+// Get Mongoose to use the global promise library
+mongoose.Promise = global.Promise;
+
+//Use Routes
+app.use("/", router);
+app.use("/api/items", items);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
+app.use("/api/categories", categories);
+app.use("/api/customers", customers);
+app.use("/api/suppliers", suppliers);
+app.use("/api/orders", orders);
+app.use("/api/products", products);
+app.use("/api/inventory", inventory);
+
+app.all("*", (req, res) => {
+  console.log("Returning a 404 from the catch-all route");
+  return res.sendStatus(404);
 });
 
-const port = 5000;
+//Handle Unknown routes Errors
+app.use((req, res, next) => {
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
 
+//Handle All other Errors
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({ error: { message: error.message } });
+  next(error);
+});
+
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
