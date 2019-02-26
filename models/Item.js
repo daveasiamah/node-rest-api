@@ -15,7 +15,8 @@ const ItemSchema = new Schema({
     type: String
   },
   min_stock: {
-    type: Number
+    type: Number,
+    default: 0
   },
   max_stock: {
     type: Number

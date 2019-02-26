@@ -58,66 +58,43 @@ router.post("/", (req, res, next) => {
     // console.log(req.body);
     res.status(400).send("Bad request");
     return;
-  }
+  } else {
+    const newInventory = new Inventory({
+      item_name,
+      price,
+      description,
+      category,
+      min_stock,
+      max_stock,
+      units,
+      quantity,
+      remarks,
+      partnumber,
+      expiry_date,
+      manufacture_date,
+      waybil_no,
+      location,
+      purchase_type,
+      supplier,
+      status,
+      transaction_type
+    });
 
-  const newInventory = new Inventory({
-    item_name,
-    price,
-    description,
-    category,
-    min_stock,
-    max_stock,
-    units,
-    quantity,
-    remarks,
-    partnumber,
-    expiry_date,
-    manufacture_date,
-    waybil_no,
-    location,
-    purchase_type,
-    supplier,
-    status,
-    transaction_type
-  });
-
-  newInventory
-    .save()
-    .then(result => {
-      console.log(result);
-      res.status(201).json({
-        message: "Created Inventory successfully",
-        createdInventory: {
-          item_name,
-          price,
-          description,
-          category,
-          min_stock,
-          max_stock,
-          units,
-          quantity,
-          remarks,
-          partnumber,
-          expiry_date,
-          manufacture_date,
-          waybil_no,
-          location,
-          purchase_type,
-          supplier,
-          status,
-          transaction_type,
+    newInventory
+      .save()
+      .then(result => {
+        console.log(result);
+        res.status(201).json({
+          message: "Created Inventory successfully",
+          newInventory,
           request: {
             type: "GET",
             url: "http://localhost:5000/api/inventory/" + result._id
           }
-        }
-      });
-    })
-    .catch(err => console.log(err));
-  // res.status(201).json({
-  //   message: "Handling POST requests to /inventory",
-  //   createdInventory: newInventory
-  // });
+        });
+      })
+      .catch(err => console.log(err));
+  }
 });
 
 //@route PUT api/inventory

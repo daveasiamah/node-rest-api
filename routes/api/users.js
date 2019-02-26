@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 const config = require("config");
 
 const User = require("../../models/User");
@@ -16,6 +17,17 @@ router.get("/", (req, res, next) => {
     .then(user => res.json(user))
     .catch(err => console.log(err));
 });
+
+//@route GET api/current
+//@desc  GET current user
+//@access Private
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({ id: req.user._id, name: req.user.name, email: req.user.email });
+  }
+);
 
 //@route GET api/users
 //@desc  GET an User by id
@@ -35,7 +47,7 @@ router.post("/", async (req, res) => {
   }
 
   // Check if this user already exisits
-  let user = await User.findOneAndUpdate({ email: req.body.email }, req.body);
+  let user = await User.findOne({ email: req.body.email }, req.body);
   if (user) {
     return res.status(400).send("That user already exisits!");
   } else {
@@ -59,31 +71,9 @@ router.post("/", async (req, res) => {
         });
       })
       .catch(error => {
-        console.log(error);
+        res.send({ Error: error });
       });
-
-    const token = jwt.sign({ _id: user._id }, config.get("PrivateKey"));
-    res.header("x-auth-token", token).send(user);
-
-    // res.send({ user });
   }
-});
-
-//@route PUT api/users
-//@desc  Update an User
-//@access Public
-router.put("/:id", (req, res, next) => {
-  User.findOneAndUpdate({ _id: req.params.id }, req.body)
-    .then(async () => {
-      const salt = await bcrypt.genSalt(10);
-      req.body.password = await bcrypt.hash(req.body.password, salt);
-    })
-    .then(() => res.json({ message: "Updated successfuly" }))
-    .catch(err =>
-      res
-        .status(404)
-        .json({ success: false, message: "Error Updating user", err })
-    );
 });
 
 //@route DELETE api/users:id

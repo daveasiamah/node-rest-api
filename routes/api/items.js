@@ -72,15 +72,7 @@ router.post("/", (req, res, next) => {
       res.status(201).json({
         message: "Created Item successfully",
         createdItem: {
-          item_name,
-          price,
-          description,
-          category,
-          min_stock,
-          max_stock,
-          units,
-          quantity,
-          remarks,
+          newItem,
           request: {
             type: "GET",
             url: "http://localhost:5000/api/items/" + result._id
@@ -89,10 +81,10 @@ router.post("/", (req, res, next) => {
       });
     })
     .catch(err => console.log(err));
-  res.status(201).json({
-    message: "Handling POST requests to /items",
-    createdItem: newItem
-  });
+  // res.status(201).json({
+  //   message: "Handling POST requests to /items",
+  //   createdItem: newItem
+  // });
 });
 
 //@route PUT api/items

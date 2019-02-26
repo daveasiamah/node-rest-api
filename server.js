@@ -4,9 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const config = require("config");
-
+const passport = require("passport");
 const router = express.Router();
-
 const app = express();
 
 if (!config.get("PrivateKey")) {
@@ -17,7 +16,7 @@ if (!config.get("PrivateKey")) {
 //Declare Routes
 const items = require("./routes/api/items");
 const users = require("./routes/api/users");
-const auth = require("./routes/api/auth");
+const login = require("./routes/api/login");
 const categories = require("./routes/api/categories");
 const customers = require("./routes/api/customers");
 const suppliers = require("./routes/api/suppliers");
@@ -51,10 +50,17 @@ app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Passport Middleware
+app.use(passport.initialize());
+
+//Passport config
+require("./config/passport")(passport);
+
 //DB Config
 const db = require("./config/keys").mongodbURI;
 
 //Connect to MongoDB
+mongoose.set("useCreateIndex", true);
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => console.log("MongoDB Connected..."))
@@ -67,13 +73,28 @@ mongoose.Promise = global.Promise;
 app.use("/", router);
 app.use("/api/items", items);
 app.use("/api/users", users);
-app.use("/api/auth", auth);
+app.use("/api/login", login);
 app.use("/api/categories", categories);
 app.use("/api/customers", customers);
 app.use("/api/suppliers", suppliers);
 app.use("/api/orders", orders);
 app.use("/api/products", products);
 app.use("/api/inventory", inventory);
+
+/** GET /api-status - Check service status **/
+router.get("/", (req, res) =>
+  res.json({
+    status: "ok",
+    Message: "Server running successfuly!"
+  })
+);
+
+router.get("/api", (req, res) =>
+  res.json({
+    status: "ok",
+    Message: "Welcome to EPS-IMS API!"
+  })
+);
 
 app.all("*", (req, res) => {
   console.log("Returning a 404 from the catch-all route");

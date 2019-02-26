@@ -42,8 +42,11 @@ router.post("/", (req, res) => {
 
   newCategory
     .save()
-    .then(category =>
-      res.json({ category, message: "Category saved successfuly" })
+    .then(
+      category => (
+        console.log(category),
+        res.json({ category, message: "Category saved successfuly" })
+      )
     );
 });
 

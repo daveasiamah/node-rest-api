@@ -28,15 +28,7 @@ router.get("/:id", (req, res) => {
 //@access Public
 router.post("/", (req, res, next) => {
   //Using ES6 destructuring
-  const {
-    order_name,
-    price,
-    description,
-    min_stockLevel,
-    unit_ofMeasure,
-    category_id,
-    remarks
-  } = req.body;
+  const { item, quantity, customer_details } = req.body;
 
   if (!order_name || order_name < 3) {
     //400 Bad Request
@@ -47,13 +39,9 @@ router.post("/", (req, res, next) => {
   }
 
   const newOrder = new Order({
-    order_name,
-    price,
-    description,
-    min_stockLevel,
-    unit_ofMeasure,
-    category_id,
-    remarks
+    item,
+    quantity,
+    customer_details
   });
 
   newOrder
@@ -63,13 +51,9 @@ router.post("/", (req, res, next) => {
       res.status(201).json({
         message: "Created Order successfully",
         createdOrder: {
-          order_name,
-          price,
-          description,
-          min_stockLevel,
-          unit_ofMeasure,
-          category_id,
-          remarks,
+          item,
+          quantity,
+          customer_details,
           request: {
             type: "GET",
             url: "http://localhost:5000/api/orders/" + result._id

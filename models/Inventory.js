@@ -59,6 +59,12 @@ const InventorySchema = new Schema({
   },
   expiry_date: {
     type: String
+  },
+  quantity: {
+    type: Number,
+    min: 0,
+    max: 999999,
+    default: 0
   }
 });
 

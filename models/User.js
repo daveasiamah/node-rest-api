@@ -7,7 +7,7 @@ const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
     maxlength: 50,
     unique: true
   },
@@ -16,7 +16,8 @@ const UserSchema = new Schema({
     required: true,
     minlength: 5,
     maxlength: 255,
-    unique: true
+    unique: true,
+    match: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
   },
   password: {
     type: String,
@@ -26,10 +27,10 @@ const UserSchema = new Schema({
   }
 });
 
-function validateUser(user) {
+validateUser = user => {
   const schema = {
     name: Joi.string()
-      .min(5)
+      .min(3)
       .max(50)
       .required(),
     email: Joi.string()
@@ -43,7 +44,7 @@ function validateUser(user) {
       .required()
   };
   return Joi.validate(user, schema);
-}
+};
 
 UserSchema.plugin(timestamp);
 module.exports = User = mongoose.model("User", UserSchema);
