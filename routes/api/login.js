@@ -16,20 +16,26 @@ router.post("/", async (req, res) => {
   // Find the user by their email address
   let user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return res.status(400).send("Incorrect email or password.");
+    // return res.status(400).send("Incorrect email or password.");
+    return res.status(400).json({ message: "Incorrect email or password!" });
   }
 
   // Then validate the Credentials in MongoDB match
   // those provided in the request
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) {
-    return res.status(400).send("Incorrect email or password.");
+    return res.status(400).json({ message: "Incorrect email or password." });
   }
-  const token = jwt.sign({ _id: user._id }, config.secretOrkey, {
-    expiresIn: 3600
-  });
 
-  res.json({ success: true, Token: "Bearer " + token });
+  const token = jwt.sign(
+    { _id: user._id, name: user.name, email: user.email },
+    config.secretOrkey,
+    {
+      expiresIn: 3600
+    }
+  );
+
+  res.json({ Token: "Bearer " + token });
 });
 
 const validate = req => {

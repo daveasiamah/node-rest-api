@@ -32,8 +32,8 @@ router.get(
 //@route GET api/users
 //@desc  GET an User by id
 //@access Public
-router.get("/:id", (req, res, next) => {
-  User.findOne({ _id: req.params.id }, req.body)
+router.get("/:id", async (req, res, next) => {
+  await User.findOne({ _id: req.params.id }, req.body)
     .then(user => res.json(user))
     .catch(err => console.log(err));
 });

@@ -18,11 +18,12 @@ const items = require("./routes/api/items");
 const users = require("./routes/api/users");
 const login = require("./routes/api/login");
 const categories = require("./routes/api/categories");
-const customers = require("./routes/api/customers");
+// const customers = require("./routes/api/customers");
 const suppliers = require("./routes/api/suppliers");
-const orders = require("./routes/api/orders");
-const products = require("./routes/api/products");
+// const orders = require("./routes/api/orders");
+// const products = require("./routes/api/products");
 const inventory = require("./routes/api/inventory");
+const profiles = require("./routes/api/profiles");
 
 //Logging Requests to Server
 app.use(morgan("dev"));
@@ -75,11 +76,12 @@ app.use("/api/items", items);
 app.use("/api/users", users);
 app.use("/api/login", login);
 app.use("/api/categories", categories);
-app.use("/api/customers", customers);
+// app.use("/api/customers", customers);
 app.use("/api/suppliers", suppliers);
-app.use("/api/orders", orders);
-app.use("/api/products", products);
+// app.use("/api/orders", orders);
+// app.use("/api/products", products);
 app.use("/api/inventory", inventory);
+app.use("/api/profiles", profiles);
 
 /** GET /api-status - Check service status **/
 router.get("/", (req, res) =>

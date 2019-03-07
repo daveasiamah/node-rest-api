@@ -48,7 +48,7 @@ router.post("/", (req, res, next) => {
     //400 Bad Request
     // console.log(req.body);
     res
-      .status(400)
+      .status(401)
       .send("Item name is required and should be minimum 3 characters");
     return;
   }
@@ -81,10 +81,6 @@ router.post("/", (req, res, next) => {
       });
     })
     .catch(err => console.log(err));
-  // res.status(201).json({
-  //   message: "Handling POST requests to /items",
-  //   createdItem: newItem
-  // });
 });
 
 //@route PUT api/items
