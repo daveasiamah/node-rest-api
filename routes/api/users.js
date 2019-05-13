@@ -67,11 +67,11 @@ router.post("/", async (req, res) => {
         res.status(201).json({
           message: "Created successfuly!",
           createdUser: { user },
-          request: "http://localhost:5000/api/users/" + result._id
+          request: "http://localhost:7000/api/users/" + result._id
         });
       })
       .catch(error => {
-        res.send({ Error: error });
+        res.status(400).send({ Error: error });
       });
   }
 });

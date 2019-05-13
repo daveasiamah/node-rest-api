@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const timestamp = require("mongoose-timestamp");
+const moment = require("moment");
+const createdDate = moment().format("llll");
+const updatedDate = moment().format("llll");
 
 // Create Schema
 const ProfileSchema = new Schema({
@@ -25,6 +28,14 @@ const ProfileSchema = new Schema({
   status: {
     type: String,
     required: true
+  },
+  date_created: {
+    type: String,
+    default: createdDate
+  },
+  date_updated: {
+    type: String,
+    default: updatedDate
   }
   // skillset: {
   //   type: [String],

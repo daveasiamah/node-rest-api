@@ -1,9 +1,17 @@
 const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
+const moment = require("moment");
+
 const Schema = mongoose.Schema;
+const createdDate = moment().format("llll");
+const updatedDate = moment().format("llll");
 
 //Create Schema
 const InventorySchema = new Schema({
+  user_name: {
+    type: Schema.Types.ObjectId,
+    ref: "Profile"
+  },
   item_name: {
     type: String,
     required: true
@@ -64,8 +72,17 @@ const InventorySchema = new Schema({
     type: Number,
     min: 0,
     max: 999999,
-    default: 0
+    default: 0,
+    required: true
   }
+  // date_created: {
+  //   type: String,
+  //   default: createdDate
+  // },
+  // date_updated: {
+  //   type: String,
+  //   default: updatedDate
+  // }
 });
 
 InventorySchema.plugin(timestamp);

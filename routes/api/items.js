@@ -75,7 +75,7 @@ router.post("/", (req, res, next) => {
           newItem,
           request: {
             type: "GET",
-            url: "http://localhost:5000/api/items/" + result._id
+            url: "http://localhost:7000/api/items/" + result._id
           }
         }
       });

@@ -40,14 +40,10 @@ router.post("/", (req, res) => {
     status
   });
 
-  newCategory
-    .save()
-    .then(
-      category => (
-        console.log(category),
-        res.json({ category, message: "Category saved successfuly" })
-      )
-    );
+  newCategory.save().then(category =>
+    // console.log(category),
+    res.json({ category, message: "Category saved successfuly" })
+  );
 });
 
 //@route UPDATE api/categories:id

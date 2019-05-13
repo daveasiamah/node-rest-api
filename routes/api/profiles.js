@@ -50,7 +50,7 @@ router.get("/all", (req, res) => {
     .populate("user", "name")
     .then(profiles => {
       if (!profiles) {
-        errors.noprofile = "There are no profiles here today";
+        errors.noprofile = "There are no profiles, create one.";
         return res.status(404).json(errors);
       }
 

@@ -1,8 +1,14 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
+const moment = require("moment");
 const Schema = mongoose.Schema;
 
+const createdDate = moment().format("llll");
+const updatedDate = moment().format("llll");
+
+// moment(Date.now()).format("MM-DD-YYYY @ h:mm:ss A");
+// moment(Date.now()).format("MM-DD-YYYY @ h:mm:ss A");
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -23,6 +29,14 @@ const UserSchema = new Schema({
     required: true,
     minlength: 5,
     maxlength: 1024
+  },
+  date_created: {
+    type: String,
+    default: createdDate
+  },
+  date_updated: {
+    type: String,
+    default: updatedDate
   }
 });
 

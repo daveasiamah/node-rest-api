@@ -8,10 +8,10 @@ const Inventory = require("../../models/Inventory");
 //@desc  GET All Items
 //@access Public
 router.get("/", (req, res, next) => {
-  Inventory.find({})
+  Inventory.find()
     .sort({ updatedAt: -1 })
-    // .populate("item", "-_id category_name description status")
-    // .exec()
+    .populate("user", ["name", "email"])
+    .exec()
     .then(inventory => res.json(inventory))
     .catch(err => console.log(err));
 });
@@ -21,8 +21,8 @@ router.get("/", (req, res, next) => {
 //@access Public
 router.get("/:id", (req, res, next) => {
   Inventory.findOne({ _id: req.params.id }, req.body)
-    // .populate("item", "-_id category_name description status")
-    // .exec()
+    .populate("user", ["name"])
+    .exec()
     .then(inventory => res.json(inventory))
     .catch(err => console.log(err));
 });
@@ -33,6 +33,7 @@ router.get("/:id", (req, res, next) => {
 router.post("/", (req, res, next) => {
   //Using ES6 destructuring
   const {
+    user_name,
     item_name,
     price,
     description,
@@ -60,6 +61,7 @@ router.post("/", (req, res, next) => {
     return;
   } else {
     const newInventory = new Inventory({
+      user_name,
       item_name,
       price,
       description,
@@ -89,7 +91,7 @@ router.post("/", (req, res, next) => {
           newInventory,
           request: {
             type: "GET",
-            url: "http://localhost:5000/api/inventory/" + result._id
+            url: "http://localhost:7000/api/inventory/" + result._id
           }
         });
       })

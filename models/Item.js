@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
 const Schema = mongoose.Schema;
+const moment = require("moment");
+const createdDate = moment(Date.now()).format("llll");
+const updatedDate = moment(Date.now()).format("llll");
 
 //Create Schema
 const ItemSchema = new Schema({
@@ -34,6 +37,14 @@ const ItemSchema = new Schema({
   status: {
     type: String,
     default: "enabled"
+  },
+  date_created: {
+    type: String,
+    default: createdDate
+  },
+  date_updated: {
+    type: String,
+    default: updatedDate
   }
 });
 

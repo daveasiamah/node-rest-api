@@ -18,12 +18,13 @@ const items = require("./routes/api/items");
 const users = require("./routes/api/users");
 const login = require("./routes/api/login");
 const categories = require("./routes/api/categories");
-// const customers = require("./routes/api/customers");
 const suppliers = require("./routes/api/suppliers");
-// const orders = require("./routes/api/orders");
-// const products = require("./routes/api/products");
 const inventory = require("./routes/api/inventory");
 const profiles = require("./routes/api/profiles");
+const reports = require("./routes/api/reports");
+// const orders = require("./routes/api/orders");
+// const products = require("./routes/api/products");
+// const customers = require("./routes/api/customers");
 
 //Logging Requests to Server
 app.use(morgan("dev"));
@@ -82,6 +83,7 @@ app.use("/api/suppliers", suppliers);
 // app.use("/api/products", products);
 app.use("/api/inventory", inventory);
 app.use("/api/profiles", profiles);
+app.use("/api/reports", reports);
 
 /** GET /api-status - Check service status **/
 router.get("/", (req, res) =>
@@ -117,5 +119,5 @@ app.use((error, req, res, next) => {
   next(error);
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
