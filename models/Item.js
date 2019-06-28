@@ -9,7 +9,8 @@ const updatedDate = moment(Date.now()).format("llll");
 const ItemSchema = new Schema({
   item_name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   price: {
     type: Number
@@ -29,6 +30,7 @@ const ItemSchema = new Schema({
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,
+    // unique: true,
     ref: "Category"
   },
   remarks: {
@@ -38,15 +40,15 @@ const ItemSchema = new Schema({
     type: String,
     default: "enabled"
   },
-  date_created: {
+  createdAt: {
     type: String,
     default: createdDate
   },
-  date_updated: {
+  updatedAt: {
     type: String,
     default: updatedDate
   }
 });
 
-ItemSchema.plugin(timestamp);
+// ItemSchema.plugin(timestamp);
 module.exports = Item = mongoose.model("Item", ItemSchema);

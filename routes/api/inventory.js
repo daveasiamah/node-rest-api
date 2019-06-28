@@ -10,8 +10,6 @@ const Inventory = require("../../models/Inventory");
 router.get("/", (req, res, next) => {
   Inventory.find()
     .sort({ updatedAt: -1 })
-    .populate("user", ["name", "email"])
-    .exec()
     .then(inventory => res.json(inventory))
     .catch(err => console.log(err));
 });
@@ -21,8 +19,7 @@ router.get("/", (req, res, next) => {
 //@access Public
 router.get("/:id", (req, res, next) => {
   Inventory.findOne({ _id: req.params.id }, req.body)
-    .populate("user", ["name"])
-    .exec()
+    .sort({ updateAt: -1 })
     .then(inventory => res.json(inventory))
     .catch(err => console.log(err));
 });
@@ -57,7 +54,8 @@ router.post("/", (req, res, next) => {
   if (!item_name || item_name.length < 3) {
     //400 Bad Request
     // console.log(req.body);
-    res.status(400).send("Bad request");
+    // res.status(400).send("Please fill all required fields.");
+    res.status(400).send({ error: "Please fill all required fields." });
     return;
   } else {
     const newInventory = new Inventory({
@@ -85,7 +83,7 @@ router.post("/", (req, res, next) => {
     newInventory
       .save()
       .then(result => {
-        console.log(result);
+        // console.log(result);
         res.status(201).json({
           message: "Created Inventory successfully",
           newInventory,
@@ -95,7 +93,13 @@ router.post("/", (req, res, next) => {
           }
         });
       })
-      .catch(err => console.log(err));
+      .catch(error => {
+        res
+          .status(400)
+          .json(error.errors)
+          .send(error.errors);
+        return;
+      });
   }
 });
 
