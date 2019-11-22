@@ -22,9 +22,6 @@ const suppliers = require("./routes/api/suppliers");
 const inventory = require("./routes/api/inventory");
 const profiles = require("./routes/api/profiles");
 const reports = require("./routes/api/reports");
-// const orders = require("./routes/api/orders");
-// const products = require("./routes/api/products");
-// const customers = require("./routes/api/customers");
 
 //Logging Requests to Server
 app.use(morgan("dev"));
@@ -34,7 +31,7 @@ app.use(cors());
 
 //Access Controls
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -63,6 +60,7 @@ const db = require("./config/keys").mongodbURI;
 
 //Connect to MongoDB
 mongoose.set("useCreateIndex", true);
+
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => console.log("MongoDB Connected..."))
@@ -77,10 +75,7 @@ app.use("/api/items", items);
 app.use("/api/users", users);
 app.use("/api/login", login);
 app.use("/api/categories", categories);
-// app.use("/api/customers", customers);
 app.use("/api/suppliers", suppliers);
-// app.use("/api/orders", orders);
-// app.use("/api/products", products);
 app.use("/api/inventory", inventory);
 app.use("/api/profiles", profiles);
 app.use("/api/reports", reports);
@@ -101,13 +96,13 @@ router.get("/api", (req, res) =>
 );
 
 app.all("*", (req, res) => {
-  console.log("Returning a 404 from the catch-all route");
+  console.log("Error: Route not found.");
   return res.sendStatus(404);
 });
 
 //Handle Unknown routes Errors
 app.use((req, res, next) => {
-  const error = new Error("Not found");
+  const error = new Error("Not found.");
   error.status = 404;
   next(error);
 });

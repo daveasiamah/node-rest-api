@@ -42,6 +42,7 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res) => {
   // First Validate The Request
   const { error } = validate(req.body);
+
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
@@ -58,8 +59,15 @@ router.post("/", async (req, res) => {
       password: req.body.password
     });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    try {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // const salt = await bcrypt.genSalt(10);
+    // user.password = await bcrypt.hash(user.password, salt);
 
     await user
       .save()
