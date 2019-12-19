@@ -29,9 +29,9 @@ app.use(morgan("dev"));
 //Use CORS : Handle requests from fontend clients
 app.use(cors());
 
-//Access Controls
+// Access Controls
 app.use((req, res, next) => {
-  // res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -40,7 +40,6 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
     return res.status(200).json({});
   }
-  next();
 });
 
 app.use("/uploads", express.static("uploads"));
@@ -62,12 +61,12 @@ const db = require("./config/keys").mongodbURI;
 mongoose.set("useCreateIndex", true);
 
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected..."))
   .catch(err => console.log(err));
 
 // Get Mongoose to use the global promise library
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 //Use Routes
 app.use("/", router);
@@ -108,11 +107,11 @@ app.use((req, res, next) => {
 });
 
 //Handle All other Errors
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({ error: { message: error.message } });
-  next(error);
-});
+// app.use((error, req, res, next) => {
+//   res.status(error.status || 500);
+//   res.json({ error: { message: error.message } });
+//   next(error);
+// });
 
 const port = process.env.PORT || 7000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
