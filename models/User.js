@@ -14,13 +14,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50
+    maxlength: 100
   },
   email: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 255,
+    maxlength: 100,
     unique: true,
     match: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
   },
@@ -40,7 +40,7 @@ const UserSchema = new Schema({
   }
 });
 
-validateUser = user => {
+const validateUser = user => {
   const schema = {
     name: Joi.string()
       .min(3)
@@ -60,5 +60,6 @@ validateUser = user => {
 };
 
 UserSchema.plugin(timestamp);
+
 module.exports = User = mongoose.model("User", UserSchema);
 exports.validate = validateUser;

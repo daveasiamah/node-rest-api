@@ -68,7 +68,7 @@ router.post("/", (req, res, next) => {
   newItem
     .save()
     .then(result => {
-      console.log(result);
+      // console.log(result);
       res.status(201).json({
         message: "Created Item successfully",
         createdItem: {
@@ -80,7 +80,9 @@ router.post("/", (req, res, next) => {
         }
       });
     })
-    .catch(err => console.log(err));
+    .catch(error => {
+      res.status(400).send({ Error: error });
+    });
 });
 
 //@route PUT api/items

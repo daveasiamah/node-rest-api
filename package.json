@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Inventory Management App in React and Express with MongoDB",
   "main": "server.js",
+  "engines": {
+    "node": "10.16.3"
+  },
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
@@ -21,18 +24,18 @@
   "homepage": "https://github.com/daveasiamah/ims-pos#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
-    "config": "^3.0.1",
+    "config": "^3.2.4",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "joi": "^14.3.1",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "mongodb": "^3.1.13",
-    "mongoose": "^5.4.10",
+    "mongodb": "^3.3.4",
+    "mongoose": "^5.7.12",
     "mongoose-timestamp": "^0.6.0",
-    "multer": "^1.4.1",
+    "multer": "^1.4.2",
     "node-gyp": "^3.8.0",
     "node-pre-gyp": "^0.12.0",
     "passport": "^0.4.0",
@@ -41,6 +44,6 @@
   },
   "devDependencies": {
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.19.4"
   }
 }

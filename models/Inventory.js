@@ -1,17 +1,13 @@
 const mongoose = require("mongoose");
-const timestamp = require("mongoose-timestamp");
+// const timestamp = require("mongoose-timestamp");
 const moment = require("moment");
 
 const Schema = mongoose.Schema;
-const createdDate = moment().format("llll");
-const updatedDate = moment().format("llll");
+const createdDate = moment().format("MMMM Do YYYY, h:mm:ss a");
+const updatedDate = moment().format("MMMM Do YYYY, h:mm:ss a");
 
 //Create Schema
 const InventorySchema = new Schema({
-  user_name: {
-    type: Schema.Types.ObjectId,
-    ref: "Profile"
-  },
   item_name: {
     type: String,
     required: true
@@ -22,13 +18,7 @@ const InventorySchema = new Schema({
   description: {
     type: String
   },
-  quantity: {
-    type: Number
-  },
   min_stock: {
-    type: Number
-  },
-  max_stock: {
     type: Number
   },
   units: {
@@ -37,30 +27,36 @@ const InventorySchema = new Schema({
   category: {
     type: String
   },
-  remarks: {
-    type: String
-  },
   status: {
-    type: String
+    type: String,
+    required: true
   },
   transaction_type: {
-    type: String
+    type: String,
+    required: true
   },
   purchase_type: {
-    type: String
+    type: String,
+    required: true
   },
   supplier: {
-    type: String
+    type: String,
+    required: true
   },
   location: {
-    type: String
+    type: String,
+    required: true
   },
-
+   remarks: {
+   type: String
+    },
   waybill_no: {
-    type: String
+    type: String,
+    unique: true
   },
   part_number: {
-    type: String
+    type: String,
+    unique: true
   },
   manufacture_date: {
     type: String
@@ -74,16 +70,16 @@ const InventorySchema = new Schema({
     max: 999999,
     default: 0,
     required: true
+  },
+  createdAt: {
+    type: String,
+    default: createdDate
+  },
+  updatedAt: {
+    type: String,
+    default: updatedDate
   }
-  // date_created: {
-  //   type: String,
-  //   default: createdDate
-  // },
-  // date_updated: {
-  //   type: String,
-  //   default: updatedDate
-  // }
 });
 
-InventorySchema.plugin(timestamp);
-module.exports = Inventory = mongoose.model("Inventory", InventorySchema);
+// InventorySchema.plugin(timestamp);
+module.exports = mongoose.model("Inventory", InventorySchema);
