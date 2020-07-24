@@ -8,11 +8,6 @@ const updatedDate = moment().format("MMMM Do YYYY, h:mm:ss a");
 
 //Create Schema
 const InventorySchema = new Schema({
-  // user_name: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   unique: true,
-  //   ref: "Profile"
-  // },
   item_name: {
     type: String,
     required: true
@@ -23,22 +18,13 @@ const InventorySchema = new Schema({
   description: {
     type: String
   },
-  quantity: {
-    type: Number
-  },
   min_stock: {
-    type: Number
-  },
-  max_stock: {
     type: Number
   },
   units: {
     type: String
   },
   category: {
-    type: String
-  },
-  remarks: {
     type: String
   },
   status: {
@@ -61,6 +47,9 @@ const InventorySchema = new Schema({
     type: String,
     required: true
   },
+   remarks: {
+   type: String
+    },
   waybill_no: {
     type: String,
     unique: true
@@ -93,4 +82,4 @@ const InventorySchema = new Schema({
 });
 
 // InventorySchema.plugin(timestamp);
-module.exports = Inventory = mongoose.model("Inventory", InventorySchema);
+module.exports = mongoose.model("Inventory", InventorySchema);

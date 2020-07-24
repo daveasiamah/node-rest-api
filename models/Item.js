@@ -30,7 +30,6 @@ const ItemSchema = new Schema({
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    // unique: true,
     ref: "Category"
   },
   remarks: {
@@ -51,4 +50,5 @@ const ItemSchema = new Schema({
 });
 
 // ItemSchema.plugin(timestamp);
-module.exports = Item = mongoose.model("Item", ItemSchema);
+// ItemSchema.index({item_name:1,unique:true})
+module.exports = mongoose.model("Item", ItemSchema);

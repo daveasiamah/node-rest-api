@@ -8,7 +8,7 @@ const Inventory = require("../../models/Inventory");
 //@desc  GET All Items
 //@access Public
 router.get("/", (req, res, next) => {
-  Inventory.find()
+  Inventory.find({})
     .sort({ updatedAt: -1 })
     .then(inventory => res.json(inventory))
     .catch(err => console.log(err));
@@ -27,81 +27,15 @@ router.get("/:id", (req, res, next) => {
 //@route POST api/inventory
 //@desc  Create an Inventory
 //@access Public
-router.post("/", (req, res, next) => {
-  //Using ES6 destructuring
-  const {
-    user_name,
-    item_name,
-    price,
-    description,
-    category,
-    min_stock,
-    max_stock,
-    units,
-    quantity,
-    remarks,
-    partnumber,
-    expiry_date,
-    manufacture_date,
-    waybil_no,
-    location,
-    purchase_type,
-    supplier,
-    status,
-    transaction_type
-  } = req.body;
+router.post("/", async(req, res, next) => {
+    const newInventory = new Inventory(req.body);
 
-  if (!item_name || item_name.length < 3) {
-    //400 Bad Request
-    // console.log(req.body);
-    // res.status(400).send("Please fill all required fields.");
-    res.status(400).send({ error: "Please fill all required fields." });
-    return;
-  } else {
-    const newInventory = new Inventory({
-      user_name,
-      item_name,
-      price,
-      description,
-      category,
-      min_stock,
-      max_stock,
-      units,
-      quantity,
-      remarks,
-      partnumber,
-      expiry_date,
-      manufacture_date,
-      waybil_no,
-      location,
-      purchase_type,
-      supplier,
-      status,
-      transaction_type
-    });
-
-    newInventory
-      .save()
-      .then(result => {
-        // console.log(result);
-        res.status(201).json({
-          message: "Created Inventory successfully",
-          newInventory,
-          request: {
-            type: "GET",
-            url: "http://localhost:7000/api/inventory/" + result._id
-          }
-        });
-      })
-      .catch(error => {
-        res
-          .status(400)
-          .json(error.errors)
-          .send(error.errors);
-        return;
-      });
-  }
+console.log("REQUEST BODY IS: ",req.body)
+// res.status(200).json({result:req.body})
+  const result =await newInventory.save().then(res =>res);
+  res.json({success:true, result})  
 });
+
 
 //@route PUT api/inventory
 //@desc  Update an inventory
