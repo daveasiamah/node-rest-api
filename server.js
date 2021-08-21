@@ -3,7 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const config = require("config");
 const passport = require("passport");
 const router = express.Router();
@@ -25,7 +25,7 @@ const profiles = require("./routes/api/profiles");
 const reports = require("./routes/api/reports");
 
 //Logging Requests to Server
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 //Use CORS : Handle requests from fontend clients
 app.use(cors());
