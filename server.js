@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -55,15 +56,18 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 //DB Config
-const db = require("./config/keys").mongodbURI;
+// const db = require("./config/keys").mongodbURI;
+// const db = process.env.URI;
 
 //Connect to MongoDB
-mongoose.set("useCreateIndex", true);
-
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => console.log("MongoDB Connected..."))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 // Get Mongoose to use the global promise library
 // mongoose.Promise = global.Promise;
@@ -83,14 +87,14 @@ app.use("/api/reports", reports);
 router.get("/", (req, res) =>
   res.json({
     status: "ok",
-    Message: "Server running successfuly!"
+    Message: "Server running successfuly!",
   })
 );
 
 router.get("/api", (req, res) =>
   res.json({
     status: "ok",
-    Message: "Welcome to EPS-IMS API!"
+    Message: "Welcome to EPS-IMS API!",
   })
 );
 
