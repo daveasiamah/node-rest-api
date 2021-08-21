@@ -32,26 +32,19 @@ router.post("/", async (req, res) => {
 
   const token = jwt.sign(
     { _id: user._id, name: user.name, email: user.email },
-    config.secretOrkey,
+    process.env.SECRET_OR_KEY,
     {
-      expiresIn: 3600
+      expiresIn: 3600,
     }
   );
 
   res.json({ Token: "Bearer " + token });
 });
 
-const validate = req => {
+const validate = (req) => {
   const schema = {
-    email: Joi.string()
-      .min(5)
-      .max(255)
-      .required()
-      .email(),
-    password: Joi.string()
-      .min(5)
-      .max(255)
-      .required()
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(255).required(),
   };
 
   return Joi.validate(req, schema);
