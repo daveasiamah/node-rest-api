@@ -14,8 +14,8 @@ const validate = require("../../models/User");
 router.get("/", (req, res, next) => {
   User.find({})
     .sort({ updatedAt: -1 })
-    .then(user => res.json(user))
-    .catch(err => console.log(err));
+    .then((user) => res.json(user))
+    .catch((err) => console.log(err));
 });
 
 //@route GET api/current
@@ -34,29 +34,26 @@ router.get(
 //@access Public
 router.get("/:id", async (req, res, next) => {
   await User.findOne({ _id: req.params.id }, req.body)
-    .then(user => res.json(user))
-    .catch(err => console.log(err));
+    .then((user) => res.json(user))
+    .catch((err) => console.log(err));
 });
 
 //Create user
 router.post("/", async (req, res) => {
-  // First Validate The Request
   const { error } = validate(req.body);
 
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
 
-  // Check if this user already exists
   let user = await User.findOne({ email: req.body.email }, req.body);
   if (user) {
     return res.status(400).send("That user already exisits!");
   } else {
-    // Insert the new user if they do not exist yet
     user = new User({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
     });
 
     try {
@@ -68,14 +65,14 @@ router.post("/", async (req, res) => {
 
     await user
       .save()
-      .then(result => {
+      .then((result) => {
         res.status(201).json({
           message: "Created successfuly!",
           createdUser: { user },
-          request: "http://localhost:7000/api/users/" + result._id
+          request: `${process.env.BASE_SERVER_URI}/api/users/` + result._id,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(400).send({ Error: error });
       });
   }
@@ -86,21 +83,19 @@ router.post("/", async (req, res) => {
 //@access Public
 router.delete("/:id", (req, res, next) => {
   User.findOneAndDelete({ _id: req.params.id })
-    .then(user =>
+    .then((user) =>
       User.deleteOne({ _id: req.params.id })
         .exec()
-        .then(result =>
+        .then((result) =>
           res.json({
             ...result.ok,
             success: true,
-            message: "Deleted successfuly"
+            message: "Deleted successfuly",
           })
         )
     )
-    .catch(err =>
-      res
-        .status(500)
-        .json({ error: err, success: false, message: "Error Deleting user" })
+    .catch((err) =>
+      res.status(500).json({ error: err, message: "Error Deleting user" })
     );
 });
 

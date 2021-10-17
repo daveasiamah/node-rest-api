@@ -1,7 +1,6 @@
 const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 // const morgan = require("morgan");
 const config = require("config");
@@ -14,7 +13,6 @@ if (!config.get("PrivateKey")) {
   process.exit(1);
 }
 
-//Declare Routes
 const items = require("./routes/api/items");
 const users = require("./routes/api/users");
 const login = require("./routes/api/login");
@@ -26,8 +24,6 @@ const reports = require("./routes/api/reports");
 
 //Logging Requests to Server
 // app.use(morgan("dev"));
-
-//Use CORS : Handle requests from fontend clients
 app.use(cors());
 
 // Access Controls
@@ -43,20 +39,11 @@ app.use(function (req, res, next) {
 });
 
 app.use("/uploads", express.static("uploads"));
-
-//BodyParser Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-//Passport Middleware
 app.use(passport.initialize());
-
-//Passport config
 require("./config/passport")(passport);
 
-//DB Config
-// const db = require("./config/keys").mongodbURI;
-// const db = process.env.URI;
+// Get Mongoose to use the global promise library
+mongoose.Promise = global.Promise;
 
 //Connect to MongoDB
 mongoose
@@ -67,9 +54,6 @@ mongoose
   })
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log(err));
-
-// Get Mongoose to use the global promise library
-mongoose.Promise = global.Promise;
 
 //Use Routes
 app.use("/", router);

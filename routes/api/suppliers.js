@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
-//Supplier Model
 const Supplier = require("../../models/Supplier");
 
 //@route GET api/suppliers
@@ -10,8 +8,8 @@ const Supplier = require("../../models/Supplier");
 router.get("/", (req, res, next) => {
   Supplier.find({})
     .sort({ updatedAt: -1 }) //Sort descending
-    .then(suppliers => res.json(suppliers))
-    .catch(err => console.log(err));
+    .then((suppliers) => res.json(suppliers))
+    .catch((err) => console.log(err));
 });
 
 //@route GET api/suppliers
@@ -19,8 +17,8 @@ router.get("/", (req, res, next) => {
 //@access Public
 router.get("/:id", (req, res) => {
   Supplier.find({ _id: req.params.id }, req.body)
-    .then(supplier => res.json(supplier))
-    .catch(err => console.log(err));
+    .then((supplier) => res.json(supplier))
+    .catch((err) => console.log(err));
 });
 
 //@route POST api/suppliers
@@ -36,7 +34,7 @@ router.post("/", (req, res, next) => {
     country,
     city,
     remarks,
-    status
+    status,
   } = req.body;
 
   if (!supplier_name || supplier_name.length < 3) {
@@ -56,12 +54,12 @@ router.post("/", (req, res, next) => {
     country,
     city,
     remarks,
-    status
+    status,
   });
 
   newSupplier
     .save()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       res.status(201).json({
         message: "Created Supplier successfully",
@@ -76,12 +74,12 @@ router.post("/", (req, res, next) => {
           status,
           request: {
             type: "GET",
-            url: "http://localhost:7000/api/suppliers/" + result._id
-          }
-        }
+            url: "http://localhost:7000/api/suppliers/" + result._id,
+          },
+        },
       });
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
   // res
   //   .status(201)
   //   .json({ message: "Handling POST requests to /suppliers", createdSupplier: supplier });
@@ -94,7 +92,7 @@ router.put("/:id", (req, res) => {
   Supplier.findOneAndUpdate({ _id: req.params.id }, req.body)
     .then(() => res.json({ success: true, message: "Updated successfuly" }))
     .catch(
-      err => console.log(err),
+      (err) => console.log(err),
       res
         .status(404)
         .json({ success: false, message: "Error Updating supplier" })
@@ -106,18 +104,18 @@ router.put("/:id", (req, res) => {
 //@access Public
 router.delete("/:id", (req, res, next) => {
   Supplier.findOneAndDelete({ _id: req.params.id })
-    .then(supplier =>
+    .then((supplier) =>
       Supplier.deleteOne({ _id: req.params.id })
         .exec()
-        .then(result =>
+        .then((result) =>
           res.json({ result, success: true, message: "Deleted successfuly" })
         )
     )
-    .catch(err =>
+    .catch((err) =>
       res.status(500).json({
         error: err,
         success: false,
-        message: "Error Deleting supplier"
+        message: "Error Deleting supplier",
       })
     );
 });
