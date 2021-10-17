@@ -69,7 +69,7 @@ mongoose
   .catch((err) => console.log(err));
 
 // Get Mongoose to use the global promise library
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
 //Use Routes
 app.use("/", router);

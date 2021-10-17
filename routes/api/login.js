@@ -2,7 +2,7 @@ const express = require("express");
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("../../config/keys");
+// const config = require("../../config/keys");
 const User = require("../../models/User");
 const router = express.Router();
 
