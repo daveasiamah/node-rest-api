@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config();
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 // const morgan = require("morgan");
@@ -37,6 +38,9 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/uploads", express.static("uploads"));
 app.use(passport.initialize());
